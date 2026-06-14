@@ -1,0 +1,18 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn import datasets
+from sklearn.linear_model import LogisticRegression
+
+iris = datasets.load_iris()
+X, y = iris["data"][:,3:], (iris["target"]==2).astype(np.int64)
+
+model = LogisticRegression(solver="lbfgs", random_state=42).fit(X, y)
+
+X_new = np.linspace(0,3,1000).reshape(-1,1)
+yp = model.predict_proba(X_new)
+plt.plot(X_new, yp[:,1], "g-", label="Prob(Virginica)")
+plt.plot(X_new, yp[:,0], "b--", label="Prob(Not Virginica)")
+plt.xlabel("Petal width (cm)"); plt.ylabel("Probability"); plt.legend(); plt.show()
+
+print(model.predict(X))
+print(model.coef_, model.intercept_)
